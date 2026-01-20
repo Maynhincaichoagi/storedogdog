@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Trị Cửa Hàng</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* CSS Bổ sung cho phần upload ảnh */
+        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: flex; justify-content: center; align-items: center; }
+        .login-box { background: white; padding: 30px; border-radius: 8px; width: 300px; text-align: center; }
+        .login-box input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; }
+        
+        .admin-container { max-width: 1000px; margin: 80px auto 20px; padding: 0 15px; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: var(--secondary-color); }
+        .img-preview-table { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;}
+        
+        .btn-edit { background: #3498db; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-delete { background: #e74c3c; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px; }
+        .btn-create { background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+
+        .edit-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1500; display: none; justify-content: center; align-items: center; }
+        .edit-modal.active { display: flex; }
+        .edit-box { background: white; padding: 20px; border-radius: 8px; width: 400px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input { width: 100%; padding: 8px; border: 1px solid #ddd; }
+        
+        /* CSS mới cho khung xem trước ảnh */
+        .image-upload-preview {
+            width: 100%;
+            height: 150px;
+            border: 2px dashed #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            overflow: hidden;
+            background: #f9f9f9;
+        }
+        .image-upload-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            display: none; /* Ẩn khi chưa có ảnh */
+        }
+        .image-upload-preview.has-img img { display: block; }
+        .image-upload-preview.has-img span { display: none; }
+
+        .form-actions { text-align: right; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <h3>Đăng Nhập Admin</h3>
+            <input type="text" id="username" placeholder="Tên đăng nhập (admin)">
+            <input type="password" id="password" placeholder="Mật khẩu (123456)">
+            <button class="btn-create" style="width:100%" onclick="checkLogin()">Vào Quản Trị</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo">Admin Panel</div>
+        <div onclick="logout()" style="cursor: pointer; color: var(--primary-color);">
+            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h2>Danh Sách Sản Phẩm</h2>
+            <button class="btn-create" onclick="openModal()">+ Thêm Món Mới</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ảnh</th>
+                    <th>Tên Món</th>
+                    <th>Giá</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody id="adminProductList">
+                </tbody>
+        </table>
+    </div>
+
+    <div class="edit-modal" id="editModal">
+        <div class="edit-box">
+            <h3 id="modalTitle">Thêm Sản Phẩm</h3>
+            <input type="hidden" id="prodId">
+            
+            <div class="form-group">
+                <label>Tên sản phẩm</label>
+                <input type="text" id="prodName">
+            </div>
+            
+            <div class="form-group">
+                <label>Giá tiền (VNĐ)</label>
+                <input type="number" id="prodPrice">
+            </div>
+
+            <div class="form-group">
+                <label>Hình ảnh sản phẩm</label>
+                <input type="file" id="fileInput" accept="image/*" onchange="previewImage()">
+                
+                <input type="hidden" id="prodImgData">
+
+                <div class="image-upload-preview" id="previewBox">
+                    <span>Chưa chọn ảnh</span>
+                    <img id="previewImgSrc" src="">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn-delete" onclick="closeModal()">Hủy</button>
+                <button class="btn-edit" onclick="saveProduct()">Lưu Lại</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
