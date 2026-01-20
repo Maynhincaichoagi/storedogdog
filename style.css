@@ -57,7 +57,7 @@ header {
     font-size: 0.8rem;
 }
 
-/* --- 3. PRODUCT GRID --- */
+/* --- 3. PRODUCT GRID (DANH SÁCH SẢN PHẨM) --- */
 .container {
     max-width: 1200px;
     margin: 20px auto;
@@ -91,11 +91,19 @@ h2.section-title {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
+/* --- QUAN TRỌNG: CẤU HÌNH ẢNH SẢN PHẨM --- */
 .product-img {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
-    background-color: #ddd;
+    height: 250px; /* Chiều cao cố định */
+    object-fit: cover; /* Lấp đầy khung */
+    object-position: top center; /* Luôn lấy phần trên của ảnh (để thấy mặt) */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    background-color: #eee;
+}
+
+.product-img:hover {
+    transform: scale(1.05); /* Phóng to nhẹ khi di chuột */
 }
 
 .product-info {
@@ -103,12 +111,16 @@ h2.section-title {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    position: relative; /* Để đè lên trên ảnh nếu cần */
+    z-index: 1;
+    background: white;
 }
 
 .product-name {
     font-size: 1.1rem;
     margin-bottom: 5px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .product-price {
@@ -134,7 +146,62 @@ h2.section-title {
     opacity: 0.9;
 }
 
-/* --- 4. CART MODAL --- */
+/* --- 4. GIAO DIỆN XEM CHI TIẾT (MODAL) --- */
+.detail-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); /* Nền tối mờ */
+    z-index: 2000;
+    display: none; /* Mặc định ẩn */
+    justify-content: center; align-items: center;
+    padding: 20px;
+    opacity: 0; transition: opacity 0.3s;
+}
+
+.detail-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.detail-content {
+    background: white;
+    width: 900px; max-width: 95%; height: 500px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex; /* Chia đôi màn hình: Trái ảnh, Phải thông tin */
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* Bên trái: Chứa ảnh to */
+.detail-left {
+    width: 50%;
+    background: #000;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.detail-left img {
+    width: 100%; height: 100%;
+    object-fit: contain; /* Hiện FULL ảnh gốc, không bị cắt */
+}
+
+/* Bên phải: Thông tin */
+.detail-right {
+    width: 50%; padding: 40px;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative;
+}
+
+.detail-close {
+    position: absolute; top: 15px; right: 20px;
+    font-size: 2rem; cursor: pointer; color: #333;
+    z-index: 10;
+}
+
+.detail-title { font-size: 2rem; margin-bottom: 15px; color: var(--text-color); }
+.detail-price { font-size: 1.8rem; color: var(--primary-color); font-weight: bold; margin-bottom: 20px; }
+.detail-desc { font-size: 1rem; color: #666; margin-bottom: 30px; line-height: 1.6; }
+
+/* --- 5. GIỎ HÀNG (SIDEBAR) --- */
 .cart-modal {
     position: fixed;
     top: 0;
@@ -206,16 +273,33 @@ h2.section-title {
     cursor: pointer;
 }
 
-/* RESPONSIVE */
-@media (max-width: 600px) {
+/* --- RESPONSIVE (DÀNH CHO ĐIỆN THOẠI) --- */
+@media (max-width: 768px) {
+    /* Chỉnh lưới sản phẩm thành 2 cột */
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
     }
+    
+    /* Ảnh nhỏ lại chút trên điện thoại */
     .product-img {
-        height: 150px;
+        height: 160px;
     }
+
+    /* Giỏ hàng full màn hình */
     .cart-modal {
         max-width: 100%;
     }
+
+    /* Modal chi tiết chuyển thành dọc */
+    .detail-content { 
+        flex-direction: column; 
+        height: auto; 
+        max-height: 90vh; 
+        width: 90%;
+    }
+    .detail-left { width: 100%; height: 250px; background: #000; }
+    .detail-right { width: 100%; padding: 20px; }
+    .detail-title { font-size: 1.5rem; }
+    .detail-price { font-size: 1.4rem; }
 }
