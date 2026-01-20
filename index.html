@@ -21,7 +21,7 @@
     <div class="container">
         <h2 class="section-title">Sản Phẩm Mới</h2>
         <div class="product-grid" id="productGrid">
-            </div>
+        </div>
     </div>
 
     <div class="cart-modal" id="cartModal">
@@ -38,6 +38,29 @@
                 <span id="totalPrice">0đ</span>
             </div>
             <button class="btn-checkout" onclick="checkout()">Đặt Hàng Ngay</button>
+        </div>
+    </div>
+
+    <div class="detail-modal" id="detailModal">
+        <div class="detail-content">
+            <span class="detail-close" onclick="closeDetail()">&times;</span>
+            
+            <div class="detail-left">
+                <img id="detailImg" src="" alt="Ảnh sản phẩm">
+            </div>
+            
+            <div class="detail-right">
+                <h2 class="detail-title" id="detailName">Tên món</h2>
+                <div class="detail-price" id="detailPrice">0đ</div>
+                
+                <p class="detail-desc" id="detailDesc">
+                    Đang tải mô tả...
+                </p>
+
+                <button class="btn-add" id="detailBtnAdd" style="padding: 15px; font-size: 1.1rem;">
+                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ ngay
+                </button>
+            </div>
         </div>
     </div>
 
